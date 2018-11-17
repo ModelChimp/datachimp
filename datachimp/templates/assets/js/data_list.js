@@ -77,7 +77,7 @@ function updateMLModelHTML(data) {
         }
       },
       {
-        title: "Experiment",
+        title: "Data Version",
         target: "ml_name",
         data: "name",
         render: function(d,t,r){
