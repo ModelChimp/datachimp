@@ -48,6 +48,9 @@ urlpatterns = [
     url(r'retrieve-data-version/(?P<project_id>\d+)/$',
         data_version.RetrieveDataVersionAPI.as_view({'get': 'retrieve'}),
         name='retrieve_data_version'),
+    url(r'list-data-version/(?P<project_id>\d+)/$',
+        data_version.ListDataVersionAPI.as_view({'get': 'list'}),
+        name='retrieve_data_version'),
 
     url(r'comment/(?P<model_id>\d+)$',  comment.CommentAPI.as_view(), name='comment_api'),
     url(r'decode-key/$', decode_key.decode_key,

@@ -54,3 +54,9 @@ class RetrieveDataVersionAPI(mixins.RetrieveModelMixin,
         response['Content-Disposition'] = 'attachment; filename=NameOfFile'
 
         return response
+
+class ListDataVersionAPI(mixins.ListModelMixin,
+                           viewsets.GenericViewSet):
+    serializer_class = DataSerializer
+    queryset = Data.objects.all()
+    permission_classes = (IsAuthenticated, HasProjectMembership)
