@@ -10,6 +10,8 @@ from .models.comment import Comment
 from .models.profile import Profile
 from .models.user import User
 from .models.invitation import Invitation
+from .models.data import Data
+
 from datachimp.forms.user_admin import UserAdmin
 from datachimp.forms.project_admin import ProjectAdmin
 from datachimp.forms.membership_admin import MembershipAdmin
@@ -41,3 +43,4 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Membership, MembershipAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Profile)
+admin.site.register(Data)

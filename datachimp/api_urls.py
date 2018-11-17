@@ -9,7 +9,8 @@ from datachimp.views.api import (project,
                                   project_dashboard,
                                   experiment_pull_params,
                                   experiment_image,
-                                  experiment_label)
+                                  experiment_label,
+                                  data_version)
 
 urlpatterns = [
     url(r'project/$', project.ProjectAPI.as_view(), name='project'),
@@ -41,6 +42,11 @@ urlpatterns = [
     url(r'ml-model/get-param-select-data/(?P<project_id>\d+)/$', ml_model.send_selected_param_data),
     url(r'create-experiment/(?P<project_id>\d+)/$', ml_model.CreateExperimentAPI.as_view(),
         name='create_experiment'),
+
+    url(r'create-data-version/(?P<project_id>\d+)/$', data_version.CreateDataVersionAPI.as_view({'post': 'create'}),
+        name='create_data_version'),
+
+
     url(r'comment/(?P<model_id>\d+)$',  comment.CommentAPI.as_view(), name='comment_api'),
     url(r'decode-key/$', decode_key.decode_key,
         name='decode-key'),
