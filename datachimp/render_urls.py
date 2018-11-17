@@ -22,6 +22,7 @@ from django.contrib.auth.views import (
 )
 
 urlpatterns = [
+    url(r'^$', common.LandingPageView.as_view(), name='landing_page'),
     url(r'^project/$', common.HomePageView.as_view(), name='home'),
     url(r'^project/(?P<project_id>\d+)/$',
         common.DataListView.as_view(),
@@ -65,7 +66,7 @@ urlpatterns = [
 ]
 
 if settings.OAUTH_LOGIN:
-    urlpatterns += [url(r'^$', login_oauth.LoginOAuthView.as_view(), name='landing_page'),
+    urlpatterns += [
                     url(r'^login/$', login_oauth.LoginOAuthView.as_view(), name='login'),
                     url(r'^invitation/(?P<invite_id>[0-9A-Za-z_\-]+)/$',
                         invite_oauth.InviteOAuthView.as_view(), name='invitation'),
