@@ -7,3 +7,4 @@ from datachimp.models.user import User
 from datachimp.models.invitation import Invitation
 from datachimp.models.experiment_image import ExperimentImage
 from datachimp.models.experiment_custom_object import ExperimentCustomObject
+from datachimp.models.data import Data
