@@ -39,10 +39,10 @@ class ProjectSerializer(serializers.ModelSerializer):
         return False
 
     def get_submission_count(self, obj):
-        return obj.ml_model_project.count()
+        return obj.data_project.count()
 
     def get_last_submitted(self, obj):
-        result = obj.ml_model_project.order_by('-date_created')
+        result = obj.data_project.order_by('-date_created')
 
         if result.count() > 0:
             result = result[0].date_created
@@ -55,7 +55,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         return obj.date_created.strftime('%b %d %Y, %H:%M:%S')
 
     def get_last_submitted_epoch(self,obj):
-        result = obj.ml_model_project.order_by('-date_created')
+        result = obj.data_project.order_by('-date_created')
 
         if result.count() > 0:
             result = result[0].date_created

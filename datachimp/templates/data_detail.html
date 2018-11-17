@@ -7,18 +7,15 @@
 {% block pagecontent %}
 {% include "navigation.html" %}
 <div class="container">
-
   <div class="row shift-down">
 
     <div class="col-md-12">
-      <a id="project-title" href="/project/{{ml_model.project.id}}">
-        <h5>{{ ml_model.project.name }} ></h5>
+      <a id="project-title" href="/project/{{data_obj.project.id}}">
+        <h5>{{ data_obj.project.name }} > </h5>
       </a>
       <h5 id="model-name"
-          data-model-id="{{ ml_model.id }}"
-          data-project-id="{{ ml_model.project.id}}">
-        {{ experiment_name }}
-
+          data-model-id="{{ data_obj.id }}"
+          data-project-id="{{ data_obj.project.id}}">{{ experiment_name }}
         {% if owner_flag %}
           <i class="fa fa-trash trash"
               data-toggle="modal"
@@ -28,51 +25,44 @@
       </h5>
       <div id="experiment-meta-information">
         <p>
-          <h5 class="project-meta-info">Experiment ID:</h5>
+          <h5 class="project-meta-info">Data Version:</h5>
           <button id="experiment-id-copy"
-                  data-clipboard-text="{{ ml_model.experiment_id}}">
+                  data-clipboard-text="{{ data_obj.version_id}}">
                   <i class="fa fa-copy"></i>
           </button>
-          {{ ml_model.experiment_id }}
-        </p>
-        <p>
-          <h5 class="project-meta-info">
-            Dataset ID:
-          </h5>
-          {{ ml_model.dataset_id }}
+          {{ data_obj.version_id }}
         </p>
       </div>
     </div>
 
     <div class="col-md-12 text-left menu-divider">
-      {% include "component/model_detail_navigation.html" %}
     </div>
 
     <div class="col-md-12">
       <div class="metric-block">
         <div class="row">
           <div class="col-md-6">
-            <h5>Custom Objects</h5>
+            <h5>Files</h5>
           </div>
-
+          <div class="col-md-6 text-right">
+            <i id="evaluation-arrow"
+                class="fa fa-chevron-down"
+                data-toggle="collapse"
+                data-target="#evaluation-table"
+                aria-expanded="true"
+                aria-controls="evaluation-table">
+            </i>
+          </div>
         </div>
         <span class="divider"></span>
-        <div class="collapse show" >
-          <table id="custom-objects-table"
-                  class="table text-color experiment-table">
-            <thead>
-              <th>
-                Name
-              </th>
-              <th>
-                Size
-              </th>
-              <th>
-                ID
-              </th>
-            </thead>
-            <tbody>
-
+        <div class="collapse show" id="evaluation-table">
+          <table class="table text-color experiment-table">
+            <tbody >
+              {% for e in data_obj.files %}
+              <tr>
+                <td class="w-50">{{ e }}</td>
+              </tr>
+              {% endfor %}
             </tbody>
           </table>
         </div>
@@ -83,7 +73,7 @@
 </div>
 
 
-<!-- Experiment Delete Modal -->
+<!-- Experiment delete modal -->
 <div class="modal fade"
       id="deleteModelModal"
       tabindex="-1"
@@ -98,7 +88,7 @@
                 class="close"
                 data-dismiss="modal"
                 aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div id="delete-model-modal-body" class="modal-body">
@@ -108,32 +98,34 @@
         <div>
           <button type="button"
                   class="btn btn-danger"
-                  id="delete-model-button">Delete</button>
+                  id="delete-model-button">
+                  Delete
+          </button>
           <button type="button"
                   class="btn btn-modelchimp"
-                  data-dismiss="modal">Close</button>
+                  data-dismiss="modal">
+                  Close
+          </button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-{% include "component/comment_modal.html" %}
+{% include "component/footer.html" %}
 {% include "component/label_modal.html" %}
 
+{% include "component/comment_modal.html" %}
 {% endblock %}
 
 {% block jscontent %}
 {% load compress %}
 {% compress js %}
-<!-- Some meta information -->
 <script>
-var model_id = '{{ ml_model.id }}',
-    experimentName = '{{ experiment_name}}';;
+var model_id = '{{ data_obj.id }}',
+    experimentName = '{{ experiment_name}}';
 </script>
 {% load static %}
 <script src="{% static "/js/model_detail.js" %}" type="text/javascript"></script>
-<script src="{% static "/js/model_detail_custom_objects.js" %}" type="text/javascript"></script>
 {% endcompress %}
-
 {% endblock %}

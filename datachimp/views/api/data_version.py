@@ -60,3 +60,8 @@ class ListDataVersionAPI(mixins.ListModelMixin,
     serializer_class = DataSerializer
     queryset = Data.objects.all()
     permission_classes = (IsAuthenticated, HasProjectMembership)
+
+    def get_queryset(self):
+        project_id = self.kwargs.get('project_id')
+
+        return self.queryset.filter(project=project_id)

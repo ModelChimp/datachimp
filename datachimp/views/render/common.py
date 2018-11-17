@@ -42,11 +42,11 @@ class EvaluationDashboardView(BaseView):
 
 
 @method_decorator(login_required, name='dispatch')
-class ModelListView(BaseView):
-    template_name = "model_list.html"
+class DataListView(BaseView):
+    template_name = "data_list.html"
 
     def get_context_data(self, **kwargs):
-        context = super(ModelListView, self).get_context_data(**kwargs)
+        context = super(DataListView, self).get_context_data(**kwargs)
         project_id = self.kwargs['project_id']
         user = self.request.user
         project = Project.objects.get(pk = project_id)
@@ -62,80 +62,7 @@ class ModelListView(BaseView):
         project_key = Membership.objects.get(user=user, project=project).key
         context['project'] = project
         context['project_key'] = project_key
-        context['member_count'] = project.members.count()
         context['owner_flag'] = owner_flag
-
-        return context
-
-
-@method_decorator(login_required, name='dispatch')
-class ModelDetailCodeView(BaseView):
-    template_name = "model_detail_code.html"
-
-    def get_context_data(self, pk,  **kwargs):
-        context = super(ModelDetailCodeView, self).get_context_data(**kwargs)
-        ml_model_obj = MachineLearningModel.objects.get(pk=pk)
-        project = ml_model_obj.project
-        project_owner = ml_model_obj.project.user
-        user = self.request.user
-
-        # Check if the user has access to the project
-        access = Membership.objects.filter(user=user, project=project).exists()
-        if not access:
-            raise PermissionDenied("Oops, you don't have permission for this!")
-
-        # Set an owner flag based on project_owner or model owner
-        owner_flag = True if user == ml_model_obj.user or user == project_owner  else False
-
-        context['ml_model'] = ml_model_obj
-        context['owner_flag'] = owner_flag
-
-        try:
-            context['code'] = str(ml_model_obj.code_file.read(), 'utf-8')
-            context['jupyter_flag'] = False
-        except ValueError:
-            context['code'] = ''
-            context['jupyter_flag'] = True
-
-        # Take first 7 characters if the name is hash
-        if ml_model_obj.name == ml_model_obj.experiment_id:
-            context['experiment_name'] = ml_model_obj.name[:7]
-        else:
-            context['experiment_name'] = ml_model_obj.name
-
-        return context
-
-
-@method_decorator(login_required, name='dispatch')
-class ModelDetailReportsView(BaseView):
-    template_name = "model_detail_reports.html"
-
-    def get_context_data(self, pk,  **kwargs):
-        context = super(ModelDetailReportsView, self).get_context_data(**kwargs)
-        ml_model_obj = MachineLearningModel.objects.get(pk=pk)
-        project = ml_model_obj.project
-        project_owner = ml_model_obj.project.user
-        user = self.request.user
-
-        # Check if the user has access to the project
-        try:
-            access = Membership.objects.get(user=user, project=project)
-        except Membership.DoesNotExist:
-            raise PermissionDenied("Oops, you don't have permission for this!")
-
-        # Set an owner flag based on project_owner or model owner
-        owner_flag = True if user == ml_model_obj.user or user == project_owner  else False
-
-        # Take first 7 characters if the name is hash
-        if ml_model_obj.name == ml_model_obj.experiment_id:
-            context['experiment_name'] = ml_model_obj.name[:7]
-        else:
-            context['experiment_name'] = ml_model_obj.name
-
-        context['ml_model'] = ml_model_obj
-        context['owner_flag'] = owner_flag
-        context['project_key'] = access.key
-        context['experiment_id'] = ml_model_obj.experiment_id
 
         return context
 
